@@ -41,12 +41,12 @@ class Scene {
   };
 
   drawImage = (imageResource, x, y, w, h, x2, y2, w2, h2) => {
-    // console.log(imageResource);
+    // rounding for pixel perfect
     if (imageResource.status === 'LOADED') {
       if (x2 !== undefined) {
-        this.ctx.drawImage(imageResource.value, x, y, w, h, x2, y2, w2, h2);
+        this.ctx.drawImage(imageResource.value, x, y, w, h, Math.round(x2), Math.round(y2), w2, h2);
       } else {
-        this.ctx.drawImage(imageResource.value, x, y, w, h);//, x2, y2, w2, h2);
+        this.ctx.drawImage(imageResource.value, Math.round(x), Math.round(y), w, h);//, x2, y2, w2, h2);
       }
     }
   };

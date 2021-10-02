@@ -48,6 +48,9 @@ export class Ld49Game extends Game {
     this.resourceLoader = new ResourceLoader();
     this.loadImage("/res/player_right.png");
     this.loadImage("/res/player_left.png");
+    this.loadImage("/res/base_run_right.png");
+    this.loadImage("/res/base_run_left.png");
+    this.loadImage("/res/attack.png");
   };
 
   loadImage = (path) => {
@@ -129,7 +132,7 @@ export class Ld49Game extends Game {
   };
 
   draw = (scene) => {
-    scene.setCenterPosition(this.player.position[0], this.player.position[1]);
+    scene.setCenterPosition(Math.round(this.player.position[0]), Math.round(this.player.position[1]));
 
     // TODO floor & stuff
 

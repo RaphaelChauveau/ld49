@@ -1,7 +1,7 @@
 
 // PNJ before ?
 import Character from "./Character";
-import {dif, div, magnitude, mul, sum} from "../engine/vector2";
+import { dif, div, magnitude, mul, sum } from "../engine/vector2";
 
 class Enemy extends Character {
   constructor(position, player) {
@@ -37,7 +37,7 @@ class Enemy extends Character {
 
     switch (this.state) {
       case "CHASE": {
-        console.log(magn, this.range);
+        // console.log(magn, this.range);
         if (magn < this.range) {
           /* if (this._timeSinceLastAttack > this.attackCooldown) {
             this._timeSinceLastAttack = 0;
