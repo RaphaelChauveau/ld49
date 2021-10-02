@@ -1,11 +1,11 @@
 class Input {
-  constructor() {
+  constructor(canvas) {
     this._keyStates = {};
     this._justUpdated = {};
     this._mousePosition = [0, 0]; // init value
     window.addEventListener('keydown', this._handleKeyDown);
     window.addEventListener('keyup', this._handleKeyUp);
-    window.addEventListener('mousemove', this._handleMouseMove);
+    canvas.addEventListener('mousemove', this._handleMouseMove);
     // TODO maybe on canvas
   }
 

@@ -8,8 +8,10 @@ export class Boid {
     this.positionX = x;
     this.positionY = y;
     this.radius = r || BOID_RADIUS;
-    this.range = this.radius + 10; // TODO 10 ? (should be over player radius)
     this.weight = w || 1;
+
+    this.range = this.radius + 10; // TODO 10 ? (should be over player radius)
+
     this.dirX = 1;
     this.dirY = 0;
     this.color = '#FF0000';
@@ -121,9 +123,9 @@ export class Boid {
 
   }
 
-  draw(scene, image) {
+  draw(scene) {
 
-    scene.drawImage(image, this.positionX - this.radius, this.positionY - this.radius, this.radius * 2, this.radius * 2);
+    // scene.drawImage(image, this.positionX - this.radius, this.positionY - this.radius, this.radius * 2, this.radius * 2);
 
     scene.ctx.beginPath();
     scene.ctx.arc(this.positionX, this.positionY, this.radius, 0, 2 * Math.PI);

@@ -24,7 +24,7 @@ class Game {
   };
 
   run = () => {
-    this.inputHandler = new Input();
+    this.inputHandler = new Input(this.canvas);
     this.loadAssets();
 
     this._lastUpdateTime = new Date();

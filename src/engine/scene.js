@@ -40,9 +40,14 @@ class Scene {
     this._updateTransform();
   };
 
-  drawImage = (imageResource, x, y, w, h) => {
+  drawImage = (imageResource, x, y, w, h, x2, y2, w2, h2) => {
+    // console.log(imageResource);
     if (imageResource.status === 'LOADED') {
-      this.ctx.drawImage(imageResource.value, x, y, w, h);
+      if (x2 !== undefined) {
+        this.ctx.drawImage(imageResource.value, x, y, w, h, x2, y2, w2, h2);
+      } else {
+        this.ctx.drawImage(imageResource.value, x, y, w, h);//, x2, y2, w2, h2);
+      }
     }
   };
 
