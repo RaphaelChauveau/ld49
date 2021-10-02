@@ -8,6 +8,7 @@ class PhysicalEntity extends Entity {
     // TODO offset used ?
     this.colliderOffset = colliderOffset;
     this.collider = new Collider(sum(position, colliderOffset), radius, weight)
+    this.effect = null;
   }
 
   expend = (colliders) => {

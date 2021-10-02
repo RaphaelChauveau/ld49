@@ -6,7 +6,6 @@ class Input {
     window.addEventListener('keydown', this._handleKeyDown);
     window.addEventListener('keyup', this._handleKeyUp);
     canvas.addEventListener('mousemove', this._handleMouseMove);
-    // TODO maybe on canvas
   }
 
   _handleKeyDown = (e) => {

@@ -4,7 +4,7 @@ class Scene {
     this.ctx = this.canvas.getContext('2d');
 
     // camera
-    this._position = {x: 0, y: 0};
+    this._position = {x: 0, y: 0}; // TODO array
     this._zoom = 1;
   }
 

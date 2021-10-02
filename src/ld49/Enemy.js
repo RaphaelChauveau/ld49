@@ -2,6 +2,7 @@
 // PNJ before ?
 import Character from "./Character";
 import { dif, div, magnitude, mul, sum } from "../engine/vector2";
+import Effect from "./Effect";
 
 class Enemy extends Character {
   constructor(position, player) {
@@ -9,15 +10,25 @@ class Enemy extends Character {
     this.target = player.position;
     this.state = "CHASE";
     this.range = this.collider.radius + 22;
-
   }
+
+  hit = (direction) => {
+    this.effect = new Effect(300, direction);
+    //this.position = [0, 0];
+    //this.collider.position = this.position;
+  };
 
   update = (delta, player) => {
     // update timings
     // this._timeSinceLastAttack += delta;
 
     // update effects
-    // this._applyEffects(delta);
+    if (this.effect) {
+      this.effect.apply(this, delta);
+      if (this.effect.over) {
+        this.effect = null;
+      }
+    }
 
     // face player
     this.target = player.position;
@@ -46,15 +57,9 @@ class Enemy extends Character {
           return;
         }
 
-        /*let hasEffect = false;
-        for (const effect of this.effects) {
-          if (!effect.over) {
-            hasEffect = true;
-          }
+        if (this.effect) {
+          break; // do not move while effect applied
         }
-        if (hasEffect) {
-          break;
-        }*/
 
         const timedVelocity = this.velocity * delta / 1000;
         this.position = sum(this.position, mul(this.direction, timedVelocity));

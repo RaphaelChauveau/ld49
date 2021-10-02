@@ -106,7 +106,7 @@ export class Ld49Game extends Game {
     }
 
     // TODO all updates
-    this.player.update(delta, this.inputHandler);
+    this.player.update(delta, this.inputHandler, this.canvas, this.enemies);
     for (const enemy of this.enemies) {
       enemy.update(delta, this.player);
     }
