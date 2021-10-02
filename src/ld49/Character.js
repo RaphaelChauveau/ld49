@@ -5,7 +5,7 @@ class Character extends PhysicalEntity {
     super(position, [0, 0], radius, weight);
     this.direction = [0, 1]; // normalized vector
 
-    this.velocity = 60 // TODO param ? (no, subclasses)
+    this.velocity = 120 // TODO param ? (no, subclasses)
   }
 
   draw = (scene) => {

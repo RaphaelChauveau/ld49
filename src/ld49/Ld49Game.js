@@ -5,6 +5,7 @@ import ResourceLoader from "../engine/resourceLoader";
 import PhysicalEntity from "./PhysicalEntity";
 import Character from "./Character";
 import Player from "./Player";
+import Enemy from "./Enemy";
 
 //import logoRes from "../res/logo.png";
 //import playerRes from "../res/player.png";
@@ -20,9 +21,8 @@ export class Ld49Game extends Game {
 
     this.colliders = [];
     this.entities = [];
-
+    this.enemies = [];
     this.player = this.createPlayer([200, 200]);
-    //this.createCharacter([201, 200], 10, 1);
 
     this.createObstacle([0, 0], 20);
     this.createObstacle([200, 300], 20);
@@ -37,9 +37,9 @@ export class Ld49Game extends Game {
 
     // this.createRangeBoid(200, 200);
 
-    // boids
-    // this.createBoid(100, 100);
-    // this.createBoid(200, 100, 20, 5); // fat boi
+    // enemies
+    this.createEnemy([100, 100]);
+    this.createEnemy([200, 100]); // , 20, 5); // fat boi
 
     this.resources = {};
   }
@@ -87,6 +87,14 @@ export class Ld49Game extends Game {
     return player;
   };
 
+  createEnemy = (p) => {
+    const enemy = new Enemy(p, this.player);
+    this.entities.push(enemy);
+    this.enemies.push(enemy);
+    this.colliders.push(enemy.collider);
+    return enemy;
+  };
+
   update = (delta) => {
     if (delta > 20) {
       // TODO if delta too high (> (2?) * classic delta) => pause
@@ -96,16 +104,15 @@ export class Ld49Game extends Game {
 
     // TODO all updates
     this.player.update(delta, this.inputHandler);
+    for (const enemy of this.enemies) {
+      enemy.update(delta, this.player);
+    }
 
     // TODO expend
     this.player.expend(this.colliders);
-    /*for (const boid of this.boids) {
-      boid.update(delta, this.player);
+    for (const enemy of this.enemies) {
+      enemy.expend(this.colliders);
     }
-    this.player.expand(this.colliders);
-    for (const boid of this.boids) {
-      boid.expand(this.colliders);
-    }*/
 
     // test // TODO in player ?
     /*if (this.inputHandler.getKeyDown('Space')) {
@@ -117,26 +124,19 @@ export class Ld49Game extends Game {
         boid.addEffect(new Effect(500, [fromPlayerX * ratio, fromPlayerY * ratio])); // TODO away from player
       }
     }*/
+
+    this.entities.sort((a, b) => a.position[1] - b.position[1]);
   };
 
   draw = (scene) => {
     scene.setCenterPosition(this.player.position[0], this.player.position[1]);
 
-    //console.log('draw game');
-    //scene.setCenterPosition(400, 300);
+    // TODO floor & stuff
 
-    // console.log(this.entities);
     for (const entity of this.entities) {
       entity.draw(scene, this.resources);
     }
 
-    /*for (const boid of this.boids) {
-      boid.draw(scene, this.logoImage);
-    }
-    for (const obstacle of this.obstacles) {
-      obstacle.draw(scene);
-    }
-    this.player.draw(scene);*/
     scene.setCenterPosition(WIDTH / 2, HEIGHT / 2);
     // TODO interface
   };
