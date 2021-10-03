@@ -1,12 +1,15 @@
 import Character from "./Character";
 import {angle, dif, div, magnitude, mul, normalize, sum} from "../engine/vector2";
+import Effect from "./Effect";
 
 class Player extends Character {
   constructor(position) {
     super(position, 20, 3);
     this.velocity = 180;
+    this.damage = 50;
 
     this.animation = "IDLE";
+    this.orientation = "right";
     this._timeSinceAnimation = 0;
 
     // TODO buffer attacks
@@ -16,6 +19,57 @@ class Player extends Character {
     this.attackRadius = Math.PI * 3 / 4; // PI / 2
     this.attackRange = 120; // 100
     this._timeSinceAttack = this.attackCoolDown + 1; // will not start fire
+
+    this.verticalInput = 0;
+    this.horizontalInput = 0;
+  };
+
+  computeInputs = (inputHandler) => {
+    if (this.verticalInput < 0) { // top, W pressed
+      if (!inputHandler.getKey('KeyW')) {
+        this.verticalInput = 0;
+        if (inputHandler.getKey('KeyS')) {
+          this.verticalInput = 1;
+        }
+      }
+    } else if (this.verticalInput > 0) { // bottom, S pressed
+      if (!inputHandler.getKey('KeyS')) {
+        this.verticalInput = 0;
+        if (inputHandler.getKey('KeyW')) {
+          this.verticalInput = -1;
+        }
+      }
+    }
+    if (inputHandler.getKeyDown('KeyS')) {
+      this.verticalInput = 1;
+    } else if (inputHandler.getKeyDown('KeyW')) {
+      this.verticalInput = -1;
+    }
+
+    if (this.horizontalInput < 0) { // top, A pressed
+      if (!inputHandler.getKey('KeyA')) {
+        this.horizontalInput = 0;
+        if (inputHandler.getKey('KeyD')) {
+          this.horizontalInput = 1;
+          this.orientation = "right";
+        }
+      }
+    } else if (this.horizontalInput > 0) { // bottom, D pressed
+      if (!inputHandler.getKey('KeyD')) {
+        this.horizontalInput = 0;
+        if (inputHandler.getKey('KeyA')) {
+          this.horizontalInput = -1;
+          this.orientation = "left";
+        }
+      }
+    }
+    if (inputHandler.getKeyDown('KeyD')) {
+      this.horizontalInput = 1;
+      this.orientation = "right";
+    } else if (inputHandler.getKeyDown('KeyA')) {
+      this.horizontalInput = -1;
+      this.orientation = "left";
+    }
   };
 
   update = (delta, inputHandler, canvas, enemies) => {
@@ -28,14 +82,10 @@ class Player extends Character {
     let moving = true;
     this.animation = "RUN";
     // TODO priority & diagonals
-    if (inputHandler.getKey('KeyW')) {
-      this.direction = [0, -1];
-    } else if (inputHandler.getKey('KeyS')) {
-      this.direction = [0, 1];
-    } else if (inputHandler.getKey('KeyA')) {
-      this.direction = [-1, 0];
-    } else if (inputHandler.getKey('KeyD')) {
-      this.direction = [1, 0];
+
+    this.computeInputs(inputHandler);
+    if (this.horizontalInput || this.verticalInput) {
+      this.direction = normalize([this.horizontalInput, this.verticalInput]);
     } else {
       moving = false;
       this.animation = "IDLE";
@@ -62,17 +112,19 @@ class Player extends Character {
           const dist = magnitude(toEnemy);
           if (Math.abs(angle(this.attackDirection, toEnemy))
             < this.attackRadius / 2 && dist < this.attackRange) {
-            enemy.hit(mul(div(toEnemy, dist), 100));
+
+            enemy.hit(this.damage,
+              new Effect(300, mul(div(toEnemy, dist), 100)));
           }
         }
-        // TODO do damage + sound & stuff
+        // TODO sound & stuff
       }
     }
   };
 
   draw = (scene, resources) => {
     // TODO switch on input change (=animationDirection)
-    const dir = this.direction[0] >= 0 ? 'right' : 'left';
+    const dir = this.orientation; //this.direction[0] >= 0 ? 'right' : 'left';
 
     if (this._timeSinceAttack < this.attackDuration) {
         const nbFrames = 5;
@@ -99,13 +151,8 @@ class Player extends Character {
         break;
       }
       case "RUN": {
-        const nbFrames = 4;
-        const animationDuration = 500; // ms
-        const currentLoopSince = this._timeSinceAnimation % animationDuration;
-        const currentFrame = Math.floor(currentLoopSince / (animationDuration / nbFrames));
-        const spriteSheet = `/res/base_run_${dir}.png`;
-        scene.drawImage(resources[spriteSheet], 128 * currentFrame, 0, 128, 128,
-          this.position[0] - 64, this.position[1] - 96, 128, 128);
+        this.animate(scene, resources[`/res/base_run_${dir}.png`], 4, 500,
+          this._timeSinceAnimation, sum(this.position, [-64, -96]), 128, 128);
         break;
       }
     }

@@ -25,7 +25,7 @@ export class Ld49Game extends Game {
     this.player = this.createPlayer([200, 200]);
 
     this.createObstacle([0, 0], 20);
-    this.createObstacle([200, 300], 20);
+    this.createObstacle([200, 300], 20, '/res/tree_1.png');
     this.createObstacle([220, 300], 30);
     this.createObstacle([230, 270], 10);
     this.createObstacle([400, 300], 10);
@@ -50,7 +50,16 @@ export class Ld49Game extends Game {
     this.loadImage("/res/player_left.png");
     this.loadImage("/res/base_run_right.png");
     this.loadImage("/res/base_run_left.png");
+    this.loadImage("/res/base_dying_right.png");
+    this.loadImage("/res/base_dying_left.png");
+
     this.loadImage("/res/attack.png");
+
+    this.loadImage("/res/tree_1.png");
+    this.loadImage("/res/medium_tree_1.png");
+    this.loadImage("/res/small_rock_1.png");
+    this.loadImage("/res/medium_rock_1.png");
+    this.loadImage("/res/medium_rock_2.png");
   };
 
   loadImage = (path) => {
@@ -69,8 +78,9 @@ export class Ld49Game extends Game {
     this.colliders.push(boid);
   }; */
 
-  createObstacle = (p, r) => {
-    const obstacle = new Obstacle(p, r);
+  createObstacle = (p, r, i) => {
+    console.log('II', i)
+    const obstacle = new Obstacle(p, r, i);
     this.entities.push(obstacle);
     this.colliders.push(obstacle);
     return obstacle;
@@ -128,6 +138,10 @@ export class Ld49Game extends Game {
       }
     }*/
 
+    this.colliders = this.colliders.filter((collider) => !collider.toKill);
+    this.entities = this.entities.filter((entity) => !entity.toKill);
+    this.enemies = this.enemies.filter((enemy) => !enemy.toKill);
+
     this.entities.sort((a, b) => a.position[1] - b.position[1]);
   };
 
@@ -138,6 +152,9 @@ export class Ld49Game extends Game {
 
     for (const entity of this.entities) {
       entity.draw(scene, this.resources);
+    }
+    for (const entity of this.entities) {
+      entity.drawHud(scene, this.resources);
     }
 
     scene.setCenterPosition(WIDTH / 2, HEIGHT / 2);

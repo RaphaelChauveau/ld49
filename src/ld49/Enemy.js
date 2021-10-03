@@ -2,7 +2,6 @@
 // PNJ before ?
 import Character from "./Character";
 import { dif, div, magnitude, mul, sum } from "../engine/vector2";
-import Effect from "./Effect";
 
 class Enemy extends Character {
   constructor(position, player) {
@@ -12,10 +11,8 @@ class Enemy extends Character {
     this.range = this.collider.radius + 22;
   }
 
-  hit = (direction) => {
-    this.effect = new Effect(300, direction);
-    //this.position = [0, 0];
-    //this.collider.position = this.position;
+  die = () => {
+    this.state = "DEAD";
   };
 
   update = (delta, player) => {
@@ -28,6 +25,17 @@ class Enemy extends Character {
       if (this.effect.over) {
         this.effect = null;
       }
+    }
+
+    if (this.state === "DEAD") {
+      // wait for death animation
+      this._deadSince += delta;
+      console.log("dead", this._deadSince > this.deathAnimationDuration);
+      if (this._deadSince > this.deathAnimationDuration) {
+        this.toKill = true;
+        this.collider.toKill = true;
+      }
+      return;
     }
 
     // face player
@@ -83,10 +91,31 @@ class Enemy extends Character {
   };
 
   draw = (scene, resources) => {
-    const spriteSheet = this.direction[0] >= 0 ? '/res/player_right.png' : '/res/player_left.png';
-    scene.drawImage(resources[spriteSheet], this.position[0] - 64, this.position[1] - 64, 128, 128);
+    const dir = this.direction[0] >= 0 ? 'right' : 'left';
+    if (this.state === "DEAD") {
+      this.animate(scene, resources[`/res/base_dying_${dir}.png`], 8, this.deathAnimationDuration,
+        this._deadSince, sum(this.position, [-64, -96]), 128, 128);
+    } else {
+      const spriteSheet = `/res/player_${dir}.png`;
+      scene.drawImage(resources[spriteSheet], this.position[0] - 64, this.position[1] - 64, 128, 128);
+    }
     this.collider.draw(scene);
   };
+
+  drawHud = (scene, resources) => {
+    if (this.state === "DEAD") {
+      return;
+    }
+    const barWidth = 50;
+    const barHeight = 10;
+    const padding = 2;
+    const innerBarWidth = barWidth - padding;
+    const innerBarHeight = barHeight - padding;
+    scene.ctx.fillStyle = "#000000";
+    scene.ctx.fillRect(this.position[0] - barWidth / 2, this.position[1] - 80 - barHeight / 2, barWidth, barHeight);
+    scene.ctx.fillStyle = "#FF0000";
+    scene.ctx.fillRect(this.position[0] - innerBarWidth / 2, this.position[1] - 80 - innerBarHeight / 2, innerBarWidth * this.health / this.maxHealth, innerBarHeight);
+  }
 }
 
 export default Enemy;
