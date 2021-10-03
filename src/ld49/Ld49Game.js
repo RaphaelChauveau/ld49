@@ -18,11 +18,14 @@ export class Ld49Game extends Game {
     this.updatePerSecond = 60;
     this.drawPerSecond = 30;
 
+    this.highscore = 0;
+
     this.colliders = [];
     this.entities = [];
     this.enemies = [];
     this.waveNumber = 1;
     this.state = "PLAYING";
+    this.score = 0;
 
     this.initLevel();
 
@@ -33,12 +36,27 @@ export class Ld49Game extends Game {
     this.resourceLoader = new ResourceLoader();
     this.loadImage("/res/player_right.png");
     this.loadImage("/res/player_left.png");
-    this.loadImage("/res/base_run_right.png");
+    this.loadImage("/res/player_run_right.png");
+    this.loadImage("/res/player_run_left.png");
+    this.loadImage("/res/player_dying_right.png");
+    this.loadImage("/res/player_dying_left.png");
+
+
+    this.loadImage("/res/enemy_run_right.png");
+    this.loadImage("/res/enemy_run_left.png");
+    this.loadImage("/res/enemy_dying_right.png");
+    this.loadImage("/res/enemy_dying_left.png");
+    this.loadImage("/res/enemy_eat_right.png");
+    this.loadImage("/res/enemy_eat_left.png");
+
+
+
+    /*this.loadImage("/res/base_run_right.png");
     this.loadImage("/res/base_run_left.png");
     this.loadImage("/res/base_dying_right.png");
     this.loadImage("/res/base_dying_left.png");
     this.loadImage("/res/base_eat_right.png");
-    this.loadImage("/res/base_eat_left.png");
+    this.loadImage("/res/base_eat_left.png");*/
 
     this.loadImage("/res/attack.png");
 
@@ -91,6 +109,7 @@ export class Ld49Game extends Game {
     this.player = this.createPlayer([0, -100]);
     this.state = "PLAYING";
     this.waveDelay = 5000; // ms (starts wave at the end of countdown)
+    this.score = 0;
 
     this.initEnvironment();
 
@@ -112,14 +131,18 @@ export class Ld49Game extends Game {
     }
   };
 
-  onEnnemyDie = () => {
-    // TODO score ++ ;
+  onEnemyDie = () => {
+    this.score += 2;
   };
 
   onPlayerDie = () => {
     console.log("ON PLAYER DIE");
     // TODO state = PLAYING | GAME_OVER
     this.state = "GAME_OVER";
+    this.highscore = parseInt(window.localStorage.getItem('score') || '0', 10);
+    if (this.score > this.highscore) {
+      window.localStorage.setItem('score', this.score);
+    }
   };
 
   createObstacle = (p, r, i) => {
@@ -137,7 +160,7 @@ export class Ld49Game extends Game {
   };
 
   createEnemy = (p) => {
-    const enemy = new Enemy(p, this.player);
+    const enemy = new Enemy(p, this.player, this);
     this.entities.push(enemy);
     this.enemies.push(enemy);
     this.colliders.push(enemy.collider);
@@ -173,7 +196,7 @@ export class Ld49Game extends Game {
 
     this.player.update(delta, this.inputHandler, this.canvas, this.enemies);
     for (const enemy of this.enemies) {
-      enemy.update(delta, this.player);
+      enemy.update(delta, this.player, this);
     }
     this.firePit.update(delta);
 
@@ -189,6 +212,7 @@ export class Ld49Game extends Game {
     if (this.enemies.length === 0 && this.player.health > 0
       && this.waveDelay === 0) {
       // TODO finished wave, congrats
+      this.score += 50;
       this.waveNumber += 1;
       this.waveDelay = 5000;
     }
@@ -207,9 +231,9 @@ export class Ld49Game extends Game {
     scene.ctx.fillText(`GAME OVER`, 400, 100);
     scene.ctx.font = "30px Arial Black";
     scene.ctx.fillText(`Score: ${this.score}`, 400, 150);
-    scene.ctx.fillText(`Highscore: TODO`, 400, 200);
+    scene.ctx.fillText(`Highscore: ${this.highscore}`, 400, 200);
     scene.ctx.font = "20px Arial Black";
-    scene.ctx.fillText(`(Dev: TODODO)`, 400, 250);
+    scene.ctx.fillText(`(Dev: 632)`, 400, 250);
     scene.ctx.font = "50px Arial Black";
     scene.ctx.fillText("ENTER TO RETRY", 400, 500);
   };
@@ -253,18 +277,29 @@ export class Ld49Game extends Game {
     const padding = 4;
     const innerBarWidth = barWidth - padding * 2;
     const innerBarHeight = barHeight - padding * 2;
+    scene.ctx.fillStyle = "#de9e41";
+    scene.ctx.fillRect(20, 20, barWidth, barHeight);
     scene.ctx.fillStyle = "#000000";
-    scene.ctx.fillRect(0, 0, barWidth, barHeight);
-    scene.ctx.fillStyle = "#FF0000";
-    scene.ctx.fillRect(padding,padding, innerBarWidth * this.player.health / this.player.maxHealth, innerBarHeight);
+    scene.ctx.fillRect(20 + padding,20 + padding, innerBarWidth, innerBarHeight);
+    scene.ctx.fillStyle = "#a53030";
+    scene.ctx.fillRect(20 + padding,20 + padding, innerBarWidth * this.player.health / this.player.maxHealth, innerBarHeight);
+
+
 
     if (this.state === "GAME_OVER") {
       this.drawGameOverUI(scene);
-    } else if (magnitude(this.player.position) > arenaRadius) {
-      scene.ctx.font = "50px Arial Black";
-      scene.ctx.fillStyle = "red";
+    } else {
+      scene.ctx.font = "20px Arial Black";
+      scene.ctx.fillStyle = "white";
       scene.ctx.textAlign = "center";
-      scene.ctx.fillText(`DO NOT LEAVE THE FIRE`, 400, 100);
+      scene.ctx.fillText(`SCORE: ${this.score}`, 700, 40);
+
+      if (magnitude(this.player.position) > arenaRadius) {
+        scene.ctx.font = "50px Arial Black";
+        scene.ctx.fillStyle = "red";
+        scene.ctx.textAlign = "center";
+        scene.ctx.fillText("DO NOT LEAVE THE FIRE", 400, 100);
+      }
     }
   };
 }

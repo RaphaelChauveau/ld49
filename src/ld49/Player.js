@@ -163,17 +163,17 @@ class Player extends Character {
     switch (this.animation) {
       case "IDLE": {
         const spriteSheet = `/res/player_${dir}.png`;
-        scene.drawImage(resources[spriteSheet], this.position[0] - 64, this.position[1] - 64, 128, 128);
+        scene.drawImage(resources[spriteSheet], this.position[0] - 64, this.position[1] - 96, 128, 128);
         break;
       }
       case "RUN": {
-        this.animate(scene, resources[`/res/base_run_${dir}.png`], 4, 500,
+        this.animate(scene, resources[`/res/player_run_${dir}.png`], 4, 500,
           this._timeSinceAnimation, dif(this.position, [64, 96]), 128, 128);
         break;
       }
       case "DEAD": {
         const pos = dif(this.position, [64, 96]);
-        const res = resources[`/res/base_dying_${dir}.png`];
+        const res = resources[`/res/player_dying_${dir}.png`];
         if (this._timeSinceAnimation > this.deathAnimationDuration) {
           scene.drawImage(res, 128 * 7, 0, 128, 128, pos[0], pos[1], 128, 128);
         } else {
