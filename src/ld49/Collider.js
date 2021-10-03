@@ -1,4 +1,4 @@
-import Entity from "./Entity";
+import Entity from "./Entity.js";
 
 class Collider extends Entity {
   constructor(position, radius, weight) {

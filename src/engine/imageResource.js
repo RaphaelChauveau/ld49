@@ -1,4 +1,4 @@
-import Resource, { LOADING_STATUS } from './resource';
+import Resource, { LOADING_STATUS } from './resource.js';
 
 class ImageResource extends Resource {
   loadValue = () => {

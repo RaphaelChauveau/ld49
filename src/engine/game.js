@@ -1,5 +1,5 @@
-import Scene from './scene';
-import Input from "./input";
+import Scene from './scene.js';
+import Input from "./input.js";
 
 
 const MILLISECOND_PER_SECOND = 1000;

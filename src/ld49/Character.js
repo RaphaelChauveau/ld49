@@ -1,5 +1,4 @@
-import PhysicalEntity from "./PhysicalEntity";
-import Effect from "./Effect";
+import PhysicalEntity from "./PhysicalEntity.js";
 
 class Character extends PhysicalEntity {
   constructor(position, radius, weight) {

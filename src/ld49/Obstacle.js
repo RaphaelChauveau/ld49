@@ -1,4 +1,4 @@
-import Collider from "./Collider";
+import Collider from "./Collider.js";
 
 class Obstacle extends Collider {
   constructor(position, radius, image) {

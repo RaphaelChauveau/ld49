@@ -1,5 +1,5 @@
-import Resource from './resource';
-import ImageResource from './imageResource';
+import Resource from './resource.js';
+import ImageResource from './imageResource.js';
 
 // TODO basically a big dict to handle resource loading/unloading
 // use ResourceLoader.load instead of Resource constructor

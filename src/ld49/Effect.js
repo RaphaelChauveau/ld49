@@ -1,4 +1,4 @@
-import { mul, sum } from "../engine/vector2";
+import { mul, sum } from "../engine/vector2.js";
 
 class Effect {
   constructor(duration, direction) {

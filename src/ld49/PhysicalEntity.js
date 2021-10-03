@@ -1,6 +1,6 @@
-import Entity from "./Entity";
-import Collider from "./Collider";
-import { dif, magnitude, mul, sum } from "../engine/vector2";
+import Entity from "./Entity.js";
+import Collider from "./Collider.js";
+import { dif, magnitude, mul, sum } from "../engine/vector2.js";
 
 class PhysicalEntity extends Entity {
   constructor(position, colliderOffset, radius, weight) {

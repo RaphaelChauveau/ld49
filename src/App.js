@@ -1,21 +1,21 @@
 import React from 'react';
 
 // import { BoidGame } from "./test_boids/BoidGame";
-import {Ld49Game} from "./ld49/Ld49Game";
+import {Ld49Game} from "./ld49/Ld49Game.js";
 
 
 function App() {
 
+  console.log('APP');
   const canvas = document.getElementById('canvas');
+  console.log('CANVAS', canvas);
   const game = new Ld49Game(canvas);
+  console.log('GAME', game);
   game.run();
 
 
   return (
     <div className="App">
-      <button onClick={game.stop}>
-        STOP APP
-      </button>
     </div>
   );
 }
