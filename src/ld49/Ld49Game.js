@@ -6,6 +6,7 @@ import PhysicalEntity from "./PhysicalEntity";
 import Character from "./Character";
 import Player from "./Player";
 import Enemy from "./Enemy";
+import FirePit from "./FirePit";
 
 //import logoRes from "../res/logo.png";
 //import playerRes from "../res/player.png";
@@ -24,14 +25,8 @@ export class Ld49Game extends Game {
     this.enemies = [];
     this.player = this.createPlayer([200, 200]);
 
-    this.createObstacle([0, 0], 20);
-    this.createObstacle([200, 300], 20, '/res/tree_1.png');
-    this.createObstacle([220, 300], 30);
-    this.createObstacle([230, 270], 10);
-    this.createObstacle([400, 300], 10);
 
-    // TOP
-    this.createObstacle([400, -100000], 100010);
+    this.initEnvironment();
 
     //this.createCharacter([200, 200], 10, 1);
 
@@ -55,11 +50,31 @@ export class Ld49Game extends Game {
 
     this.loadImage("/res/attack.png");
 
+    // environment
+    this.loadImage("/res/fire_pit.png");
     this.loadImage("/res/tree_1.png");
     this.loadImage("/res/medium_tree_1.png");
+    this.loadImage("/res/medium_tree_2.png");
     this.loadImage("/res/small_rock_1.png");
     this.loadImage("/res/medium_rock_1.png");
     this.loadImage("/res/medium_rock_2.png");
+  };
+
+  initEnvironment = () => {
+    // TOP
+    this.createObstacle([400, -100000], 100010);
+
+    //
+    this.createObstacle([0, 400], 20, "/res/tree_1.png");
+    this.createObstacle([100, 400], 30, "/res/medium_tree_1.png");
+    this.createObstacle([200, 400], 30, "/res/medium_tree_2.png");
+    this.createObstacle([300, 400], 20, "/res/small_rock_1.png");
+    this.createObstacle([400, 400], 30, "/res/medium_rock_1.png");
+    this.createObstacle([500, 400], 30, "/res/medium_rock_2.png");
+
+    this.firePit = new FirePit([-100, 400]);
+    this.entities.push(this.firePit);
+    this.colliders.push(this.firePit);
   };
 
   loadImage = (path) => {
@@ -115,13 +130,12 @@ export class Ld49Game extends Game {
       console.log(delta);
     }
 
-    // TODO all updates
     this.player.update(delta, this.inputHandler, this.canvas, this.enemies);
     for (const enemy of this.enemies) {
       enemy.update(delta, this.player);
     }
+    this.firePit.update(delta);
 
-    // TODO expend
     this.player.expend(this.colliders);
     for (const enemy of this.enemies) {
       enemy.expend(this.colliders);
