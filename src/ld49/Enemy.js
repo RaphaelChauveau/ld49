@@ -9,6 +9,12 @@ class Enemy extends Character {
     this.target = player.position;
     this.state = "CHASE";
     this.range = this.collider.radius + 22;
+
+    this.attackCooldown = 1000; //ms
+    this.attackDuration = 500; // ms
+    this._timeSinceLastAttack = this.attackCooldown + 1;
+
+    this._timeSinceChase = 0;
   }
 
   die = () => {
@@ -17,7 +23,8 @@ class Enemy extends Character {
 
   update = (delta, player) => {
     // update timings
-    // this._timeSinceLastAttack += delta;
+    this._timeSinceLastAttack += delta;
+    this._timeSinceChase += delta;
 
     // update effects
     if (this.effect) {
@@ -58,10 +65,10 @@ class Enemy extends Character {
       case "CHASE": {
         // console.log(magn, this.range);
         if (magn < this.range) {
-          /* if (this._timeSinceLastAttack > this.attackCooldown) {
+          if (this._timeSinceLastAttack > this.attackCooldown) {
             this._timeSinceLastAttack = 0;
             this.state = "ATTACK";
-          } */
+          }
           return;
         }
 
@@ -77,10 +84,10 @@ class Enemy extends Character {
         break;
       }
       case "ATTACK": {
-        /*if (this._timeSinceLastAttack > this.attackDuration) {
+        if (this._timeSinceLastAttack > this.attackDuration) {
           this.state = "CHASE";
           return;
-        }*/
+        }
         break;
       }
       default: {
@@ -95,9 +102,12 @@ class Enemy extends Character {
     if (this.state === "DEAD") {
       this.animate(scene, resources[`/res/base_dying_${dir}.png`], 8, this.deathAnimationDuration,
         this._deadSince, sum(this.position, [-64, -96]), 128, 128);
-    } else {
-      const spriteSheet = `/res/player_${dir}.png`;
-      scene.drawImage(resources[spriteSheet], this.position[0] - 64, this.position[1] - 64, 128, 128);
+    } else if (this.state === "ATTACK") {
+      this.animate(scene, resources[`/res/base_eat_${dir}.png`], 6, this.attackDuration,
+        this._timeSinceLastAttack, sum(this.position, [-64, -96]), 128, 128);
+    } else if (this.state === "CHASE"){
+      this.animate(scene, resources[`/res/base_run_${dir}.png`], 4, 500,
+          this._timeSinceChase, sum(this.position, [-64, -96]), 128, 128);
     }
     this.collider.draw(scene);
   };

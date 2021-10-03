@@ -47,6 +47,8 @@ export class Ld49Game extends Game {
     this.loadImage("/res/base_run_left.png");
     this.loadImage("/res/base_dying_right.png");
     this.loadImage("/res/base_dying_left.png");
+    this.loadImage("/res/base_eat_right.png");
+    this.loadImage("/res/base_eat_left.png");
 
     this.loadImage("/res/attack.png");
 
