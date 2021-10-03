@@ -21,9 +21,9 @@ export class Ld49Game extends Game {
     this.entities = [];
     this.enemies = [];
     this.waveNumber = 1;
+    this.state = "PLAYING";
 
     this.initLevel();
-    this.initEnvironment();
 
     this.resources = {};
   }
@@ -78,14 +78,19 @@ export class Ld49Game extends Game {
     this.enemies = [];
     this.waveNumber = 1;
     this.player = this.createPlayer([0, -100]);
+    this.state = "PLAYING";
+    this.waveDelay = 5000; // ms (starts wave at the end of countdown)
+
+    this.initEnvironment();
 
     // enemies
     // this.createEnemy([100, -200]);
     // this.createEnemy([200, -200]); // , 20, 5); // fat boi
-    this.startWave();
   };
 
   startWave = () => {
+    console.log('START WAVE !!');
+    // TODO sound ?
     const nbEnemies = this.waveNumber * 2;
 
     for (let i = 0; i < nbEnemies; i += 1) {
@@ -94,6 +99,16 @@ export class Ld49Game extends Game {
       const position = [Math.cos(random1 * Math.PI), Math.cos(random2 * Math.PI)];
       this.createEnemy(sum(this.player.position, mul(position, 500)));
     }
+  };
+
+  onEnnemyDie = () => {
+    // TODO score ++ ;
+  };
+
+  onPlayerDie = () => {
+    console.log("ON PLAYER DIE");
+    // TODO state = PLAYING | GAME_OVER
+    this.state = "GAME_OVER";
   };
 
   /* createBoid = (x, y, r, w) => {
@@ -138,11 +153,30 @@ export class Ld49Game extends Game {
     return enemy;
   };
 
+  updateGameOver = () => {
+    if (this.inputHandler.getKeyDown('Enter')) {
+      this.initLevel();
+      // this.state = "PLAYING";
+    }
+  };
+
   update = (delta) => {
-    if (delta > 20) {
+    if (delta > 40) {
       // TODO if delta too high (> (2?) * classic delta) => pause
       // TODO handle in engine ?
       console.log(delta);
+      return;
+    }
+
+    console.log(this.waveDelay);
+    if (this.waveDelay > 0) {
+      console.log('AAA', delta);
+      this.waveDelay -= delta;
+      if (this.waveDelay <= 0) {
+        console.log('START WAVE');
+        this.startWave();
+        this.waveDelay = 0;
+      }
     }
 
     this.player.update(delta, this.inputHandler, this.canvas, this.enemies);
@@ -156,28 +190,36 @@ export class Ld49Game extends Game {
       enemy.expend(this.colliders);
     }
 
-    // test // TODO in player ?
-    /*if (this.inputHandler.getKeyDown('Space')) {
-      for (const boid of this.boids) {
-        const fromPlayerX = boid.positionX - this.player.positionX;
-        const fromPlayerY = boid.positionY - this.player.positionY;
-        const ratio = 100 / magnitude(fromPlayerX, fromPlayerY);
-        // TODO affected by entity weight ?
-        boid.addEffect(new Effect(500, [fromPlayerX * ratio, fromPlayerY * ratio])); // TODO away from player
-      }
-    }*/
-
     this.colliders = this.colliders.filter((collider) => !collider.toKill);
     this.entities = this.entities.filter((entity) => !entity.toKill);
     this.enemies = this.enemies.filter((enemy) => !enemy.toKill);
 
-    if (this.enemies.length === 0 && this.player.health > 0) {
+    if (this.enemies.length === 0 && this.player.health > 0
+      && this.waveDelay === 0) {
       // TODO finished wave, congrats
       this.waveNumber += 1;
-      this.startWave()
+      this.waveDelay = 5000;
     }
 
     this.entities.sort((a, b) => a.position[1] - b.position[1]);
+
+    if (this.state === "GAME_OVER") {
+      this.updateGameOver();
+    }
+  };
+
+  drawGameOverUI = (scene) => {
+    scene.ctx.font = "50px Arial Black";
+    scene.ctx.fillStyle = "black";
+    scene.ctx.textAlign = "center";
+    scene.ctx.fillText(`GAME OVER`, 400, 100);
+    scene.ctx.font = "30px Arial Black";
+    scene.ctx.fillText(`Score: ${this.score}`, 400, 150);
+    scene.ctx.fillText(`Highscore: TODO`, 400, 200);
+    scene.ctx.font = "20px Arial Black";
+    scene.ctx.fillText(`(Dev: TODODO)`, 400, 250);
+    scene.ctx.font = "50px Arial Black";
+    scene.ctx.fillText("ENTER TO RETRY", 400, 500);
   };
 
   draw = (scene) => {
@@ -202,5 +244,11 @@ export class Ld49Game extends Game {
     scene.ctx.fillRect(0, 0, barWidth, barHeight);
     scene.ctx.fillStyle = "#FF0000";
     scene.ctx.fillRect(padding,padding, innerBarWidth * this.player.health / this.player.maxHealth, innerBarHeight);
+
+    // console.log(this.state);
+    if (this.state === "GAME_OVER") {
+      // console.log("IS GO");
+      this.drawGameOverUI(scene);
+    }
   };
 }

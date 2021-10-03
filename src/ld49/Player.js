@@ -15,7 +15,7 @@ class Player extends Character {
     this.orientation = "right";
     this._timeSinceAnimation = 0;
 
-    // TODO buffer attacks
+    // TODO buffer attacks ?
     this.attackDuration = 300; // ms
     this.attackCoolDown = 600; // ms
     this.attackDirection = [-1, 0];
@@ -28,8 +28,8 @@ class Player extends Character {
   };
 
   die = () => {
-    // this.game.onPlayerDie(); // TODO
     // if (this.)
+    this.game.onPlayerDie(); // TODO
     console.log('YOU ARE DEAD');
     this.animation = "DEAD";
     this._timeSinceAnimation = 0;
