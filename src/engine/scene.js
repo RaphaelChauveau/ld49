@@ -9,7 +9,8 @@ class Scene {
   }
 
   drawBegin = () => {
-    this.ctx.fillStyle = '#F9F9F9';
+    // this.ctx.fillStyle = '#F9F9F9';
+    this.ctx.fillStyle = '#151d28';
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
   };
 

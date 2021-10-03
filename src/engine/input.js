@@ -6,7 +6,31 @@ class Input {
     window.addEventListener('keydown', this._handleKeyDown);
     window.addEventListener('keyup', this._handleKeyUp);
     canvas.addEventListener('mousemove', this._handleMouseMove);
+    canvas.addEventListener('mouseclick', this._handleMouseMove);
+    canvas.addEventListener('mousedown', this._handleMouseDown);
+    canvas.addEventListener('mouseup', this._handleMouseUp);
   }
+
+  _handleMouseDown = (e) => {
+    // TODO copied from _handleKeyDown (ughhh)
+    const keyCode = "MOUSE_CLICK";
+    console.log(keyCode);
+    const wasKeyPressed = this._keyStates[keyCode] || false;
+    if (!wasKeyPressed) {
+      this._keyStates[keyCode] = true;
+      this._justUpdated[keyCode] = true;
+    }
+  };
+
+  _handleMouseUp = (e) => {
+    // TODO same
+    const keyCode = "MOUSE_CLICK";
+    const wasKeyPressed = this._keyStates[keyCode] || false;
+    if (wasKeyPressed) {
+      this._keyStates[keyCode] = false;
+      this._justUpdated[keyCode] = false;
+    }
+  };
 
   _handleKeyDown = (e) => {
     const keyCode = e.code;
@@ -28,7 +52,7 @@ class Input {
   };
 
   _handleMouseMove = (e) => {
-    this._mousePosition = [e.pageX, e.pageY];
+    this._mousePosition = [e.offsetX, e.offsetY];
   };
 
   newFrame = () => {

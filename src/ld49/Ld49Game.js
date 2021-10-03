@@ -10,6 +10,7 @@ import FirePit from "./FirePit";
 
 const WIDTH = 800;
 const HEIGHT = 600;
+const arenaRadius = 500;
 
 export class Ld49Game extends Game {
   constructor(canvas) {
@@ -56,16 +57,26 @@ export class Ld49Game extends Game {
   };
 
   initEnvironment = () => {
-    // TOP
-    // this.createObstacle([400, -100000], 100010);
-
-    //
-    this.createObstacle([100, 0], 20, "/res/tree_1.png");
-    this.createObstacle([200, 0], 30, "/res/medium_tree_1.png");
-    this.createObstacle([300, 0], 30, "/res/medium_tree_2.png");
-    this.createObstacle([400, 0], 20, "/res/small_rock_1.png");
-    this.createObstacle([500, 0], 30, "/res/medium_rock_1.png");
-    this.createObstacle([600, 0], 30, "/res/medium_rock_2.png");
+    // new
+    this.createObstacle([603 - 500, 129 - 500], 20, "/res/tree_1.png");
+    this.createObstacle([309 - 500, 411 - 500], 20, "/res/tree_1.png");
+    this.createObstacle([855 - 500, 471 - 500], 20, "/res/tree_1.png");
+    this.createObstacle([366 - 500, 951 - 500], 20, "/res/tree_1.png");
+    this.createObstacle([858 - 500, 261 - 500], 30, "/res/medium_tree_1.png");
+    this.createObstacle([750 - 500, 606 - 500], 30, "/res/medium_tree_1.png");
+    this.createObstacle([156 - 500, 687 - 500], 30, "/res/medium_tree_1.png");
+    this.createObstacle([609 - 500, 426 - 500], 30, "/res/medium_tree_2.png");
+    this.createObstacle([81 - 500, 495 - 500], 30, "/res/medium_tree_2.png");
+    this.createObstacle([333 - 500, 123 - 500], 20, "/res/small_rock_1.png");
+    this.createObstacle([948 - 500, 513 - 500], 20, "/res/small_rock_1.png");
+    this.createObstacle([603 - 500, 693 - 500], 20, "/res/small_rock_1.png");
+    this.createObstacle([222 - 500, 801 - 500], 20, "/res/small_rock_1.png");
+    this.createObstacle([387 - 500, 264 - 500], 30, "/res/medium_rock_1.png");
+    this.createObstacle([747 - 500, 348 - 500], 30, "/res/medium_rock_1.png");
+    this.createObstacle([654 - 500, 834 - 500], 30, "/res/medium_rock_1.png");
+    this.createObstacle([225 - 500, 210 - 500], 30, "/res/medium_rock_2.png");
+    this.createObstacle([333 - 500, 606 - 500], 30, "/res/medium_rock_2.png");
+    this.createObstacle([489 - 500, 777 - 500], 30, "/res/medium_rock_2.png");
 
     this.firePit = new FirePit([0, 0]);
     this.entities.push(this.firePit);
@@ -111,31 +122,11 @@ export class Ld49Game extends Game {
     this.state = "GAME_OVER";
   };
 
-  /* createBoid = (x, y, r, w) => {
-    const boid = new Boid(x, y, r, w);
-    this.boids.push(boid);
-    this.colliders.push(boid);
-  }; */
-
-  /* createRangeBoid = (x, y) => {
-    const boid = new RangeBoid(x, y);
-    this.boids.push(boid);
-    this.colliders.push(boid);
-  }; */
-
   createObstacle = (p, r, i) => {
-    console.log('II', i);
     const obstacle = new Obstacle(p, r, i);
     this.entities.push(obstacle);
     this.colliders.push(obstacle);
     return obstacle;
-  };
-
-  createCharacter = (p, r, w = 1) => {
-    const character = new Character(p, r, w);
-    this.entities.push(character);
-    this.colliders.push(character.collider);
-    return character;
   };
 
   createPlayer = (p) => {
@@ -168,15 +159,16 @@ export class Ld49Game extends Game {
       return;
     }
 
-    console.log(this.waveDelay);
     if (this.waveDelay > 0) {
-      console.log('AAA', delta);
       this.waveDelay -= delta;
       if (this.waveDelay <= 0) {
-        console.log('START WAVE');
         this.startWave();
         this.waveDelay = 0;
       }
+    }
+
+    if (magnitude(this.player.position) > arenaRadius) {
+      this.player.hit(20 * delta / 1000);
     }
 
     this.player.update(delta, this.inputHandler, this.canvas, this.enemies);
@@ -210,7 +202,7 @@ export class Ld49Game extends Game {
 
   drawGameOverUI = (scene) => {
     scene.ctx.font = "50px Arial Black";
-    scene.ctx.fillStyle = "black";
+    scene.ctx.fillStyle = "white";
     scene.ctx.textAlign = "center";
     scene.ctx.fillText(`GAME OVER`, 400, 100);
     scene.ctx.font = "30px Arial Black";
@@ -222,10 +214,31 @@ export class Ld49Game extends Game {
     scene.ctx.fillText("ENTER TO RETRY", 400, 500);
   };
 
+
+
   draw = (scene) => {
     scene.setCenterPosition(Math.round(this.player.position[0]), Math.round(this.player.position[1]));
 
-    // TODO floor & stuff
+    // XXX FLOOR
+    scene.ctx.beginPath();
+    scene.ctx.fillStyle = "#19332d";
+    scene.ctx.arc(0, 0, 500, 0, 2 * Math.PI);
+    scene.ctx.fill();
+    scene.ctx.beginPath();
+    scene.ctx.fillStyle = "#25562e";
+    scene.ctx.arc(0, 0, 200, 0, 2 * Math.PI);
+    scene.ctx.fill();
+    scene.ctx.beginPath();
+    scene.ctx.fillStyle = "#468232";
+    scene.ctx.arc(0, 0, 100, 0, 2 * Math.PI);
+    scene.ctx.fill();
+    scene.ctx.beginPath();
+    scene.ctx.fillStyle = "#a8ca58";
+    scene.ctx.arc(0, 0, 30, 0, 2 * Math.PI);
+    scene.ctx.fill();
+
+
+    // XXX ENTITIES
     for (const entity of this.entities) {
       entity.draw(scene, this.resources);
     }
@@ -245,10 +258,13 @@ export class Ld49Game extends Game {
     scene.ctx.fillStyle = "#FF0000";
     scene.ctx.fillRect(padding,padding, innerBarWidth * this.player.health / this.player.maxHealth, innerBarHeight);
 
-    // console.log(this.state);
     if (this.state === "GAME_OVER") {
-      // console.log("IS GO");
       this.drawGameOverUI(scene);
+    } else if (magnitude(this.player.position) > arenaRadius) {
+      scene.ctx.font = "50px Arial Black";
+      scene.ctx.fillStyle = "red";
+      scene.ctx.textAlign = "center";
+      scene.ctx.fillText(`DO NOT LEAVE THE FIRE`, 400, 100);
     }
   };
 }

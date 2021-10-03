@@ -115,7 +115,8 @@ class Player extends Character {
       this._timeSinceAnimation = 0;
     }
 
-    if (inputHandler.getKeyDown('Space')) {
+    //if (inputHandler.getKeyDown('Space')) {
+    if (inputHandler.getKeyDown('MOUSE_CLICK')) {
       if (this._timeSinceAttack > this.attackCoolDown) {
         this._timeSinceAttack = 0;
 
