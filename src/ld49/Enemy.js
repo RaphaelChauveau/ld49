@@ -2,6 +2,7 @@
 // PNJ before ?
 import Character from "./Character";
 import { dif, div, magnitude, mul, sum } from "../engine/vector2";
+import {play} from "../engine/sound_test/soundTest";
 
 class Enemy extends Character {
   constructor(position, player, game) {
@@ -91,6 +92,7 @@ class Enemy extends Character {
         if (!this.attackInflictedDamage
           && this._timeSinceLastAttack > 5 / 6 * this.attackDuration) {
           this.attackInflictedDamage = true;
+          play('/res/Crunch.ogg');
           player.hit(this.damage);
         }
         if (this._timeSinceLastAttack > this.attackDuration) {

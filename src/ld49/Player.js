@@ -1,6 +1,7 @@
 import Character from "./Character";
 import {angle, dif, div, magnitude, mul, normalize, sum} from "../engine/vector2";
 import Effect from "./Effect";
+import {play} from "../engine/sound_test/soundTest";
 
 class Player extends Character {
   constructor(position, game) {
@@ -119,6 +120,7 @@ class Player extends Character {
     if (inputHandler.getKeyDown('MOUSE_CLICK')) {
       if (this._timeSinceAttack > this.attackCoolDown) {
         this._timeSinceAttack = 0;
+        play('/res/Hit.ogg');
 
         const toMouse = dif(inputHandler.getMousePosition(), [canvas.width / 2, canvas.height / 2]);
         this.attackDirection = normalize(toMouse);

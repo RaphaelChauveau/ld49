@@ -7,6 +7,7 @@ import Character from "./Character";
 import Player from "./Player";
 import Enemy from "./Enemy";
 import FirePit from "./FirePit";
+import {load, play} from "../engine/sound_test/soundTest";
 
 const WIDTH = 800;
 const HEIGHT = 600;
@@ -49,15 +50,6 @@ export class Ld49Game extends Game {
     this.loadImage("/res/enemy_eat_right.png");
     this.loadImage("/res/enemy_eat_left.png");
 
-
-
-    /*this.loadImage("/res/base_run_right.png");
-    this.loadImage("/res/base_run_left.png");
-    this.loadImage("/res/base_dying_right.png");
-    this.loadImage("/res/base_dying_left.png");
-    this.loadImage("/res/base_eat_right.png");
-    this.loadImage("/res/base_eat_left.png");*/
-
     this.loadImage("/res/attack.png");
 
     // environment
@@ -68,6 +60,13 @@ export class Ld49Game extends Game {
     this.loadImage("/res/small_rock_1.png");
     this.loadImage("/res/medium_rock_1.png");
     this.loadImage("/res/medium_rock_2.png");
+
+    // sounds
+    load("/res/Crunch.ogg");
+    load("/res/Death.ogg");
+    load("/res/Death2.ogg");
+    load("/res/Hibou.ogg");
+    load("/res/Hit.ogg");
   };
 
   loadImage = (path) => {
@@ -119,8 +118,8 @@ export class Ld49Game extends Game {
   };
 
   startWave = () => {
-    console.log('START WAVE !!');
-    // TODO sound ?
+    play("/res/Hibou.ogg");
+
     const nbEnemies = this.waveNumber * 2;
 
     for (let i = 0; i < nbEnemies; i += 1) {
@@ -133,11 +132,12 @@ export class Ld49Game extends Game {
 
   onEnemyDie = () => {
     this.score += 2;
+    play('/res/Death2.ogg');
   };
 
   onPlayerDie = () => {
     console.log("ON PLAYER DIE");
-    // TODO state = PLAYING | GAME_OVER
+    play('/res/Death.ogg');
     this.state = "GAME_OVER";
     this.highscore = parseInt(window.localStorage.getItem('score') || '0', 10);
     if (this.score > this.highscore) {
