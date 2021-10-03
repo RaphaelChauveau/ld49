@@ -1,15 +1,12 @@
 import Game from '../engine/game';
 import Obstacle from "./Obstacle";
-import { magnitude } from "../engine/vector2";
+import {magnitude, mul, sum} from "../engine/vector2";
 import ResourceLoader from "../engine/resourceLoader";
 import PhysicalEntity from "./PhysicalEntity";
 import Character from "./Character";
 import Player from "./Player";
 import Enemy from "./Enemy";
 import FirePit from "./FirePit";
-
-//import logoRes from "../res/logo.png";
-//import playerRes from "../res/player.png";
 
 const WIDTH = 800;
 const HEIGHT = 600;
@@ -23,18 +20,10 @@ export class Ld49Game extends Game {
     this.colliders = [];
     this.entities = [];
     this.enemies = [];
-    this.player = this.createPlayer([200, 200]);
+    this.waveNumber = 1;
 
-
+    this.initLevel();
     this.initEnvironment();
-
-    //this.createCharacter([200, 200], 10, 1);
-
-    // this.createRangeBoid(200, 200);
-
-    // enemies
-    this.createEnemy([100, 100]);
-    this.createEnemy([200, 100]); // , 20, 5); // fat boi
 
     this.resources = {};
   }
@@ -62,25 +51,49 @@ export class Ld49Game extends Game {
     this.loadImage("/res/medium_rock_2.png");
   };
 
+  loadImage = (path) => {
+    this.resources[path] = this.resourceLoader.loadImage(path);
+  };
+
   initEnvironment = () => {
     // TOP
-    this.createObstacle([400, -100000], 100010);
+    // this.createObstacle([400, -100000], 100010);
 
     //
-    this.createObstacle([0, 400], 20, "/res/tree_1.png");
-    this.createObstacle([100, 400], 30, "/res/medium_tree_1.png");
-    this.createObstacle([200, 400], 30, "/res/medium_tree_2.png");
-    this.createObstacle([300, 400], 20, "/res/small_rock_1.png");
-    this.createObstacle([400, 400], 30, "/res/medium_rock_1.png");
-    this.createObstacle([500, 400], 30, "/res/medium_rock_2.png");
+    this.createObstacle([100, 0], 20, "/res/tree_1.png");
+    this.createObstacle([200, 0], 30, "/res/medium_tree_1.png");
+    this.createObstacle([300, 0], 30, "/res/medium_tree_2.png");
+    this.createObstacle([400, 0], 20, "/res/small_rock_1.png");
+    this.createObstacle([500, 0], 30, "/res/medium_rock_1.png");
+    this.createObstacle([600, 0], 30, "/res/medium_rock_2.png");
 
-    this.firePit = new FirePit([-100, 400]);
+    this.firePit = new FirePit([0, 0]);
     this.entities.push(this.firePit);
     this.colliders.push(this.firePit);
   };
 
-  loadImage = (path) => {
-    this.resources[path] = this.resourceLoader.loadImage(path);
+  initLevel = () => {
+    this.colliders = [];
+    this.entities = [];
+    this.enemies = [];
+    this.waveNumber = 1;
+    this.player = this.createPlayer([0, -100]);
+
+    // enemies
+    // this.createEnemy([100, -200]);
+    // this.createEnemy([200, -200]); // , 20, 5); // fat boi
+    this.startWave();
+  };
+
+  startWave = () => {
+    const nbEnemies = this.waveNumber * 2;
+
+    for (let i = 0; i < nbEnemies; i += 1) {
+      const random1 = Math.random() * 2 - 1;
+      const random2 = Math.random() * 2 - 1;
+      const position = [Math.cos(random1 * Math.PI), Math.cos(random2 * Math.PI)];
+      this.createEnemy(sum(this.player.position, mul(position, 500)));
+    }
   };
 
   /* createBoid = (x, y, r, w) => {
@@ -96,7 +109,7 @@ export class Ld49Game extends Game {
   }; */
 
   createObstacle = (p, r, i) => {
-    console.log('II', i)
+    console.log('II', i);
     const obstacle = new Obstacle(p, r, i);
     this.entities.push(obstacle);
     this.colliders.push(obstacle);
@@ -111,7 +124,7 @@ export class Ld49Game extends Game {
   };
 
   createPlayer = (p) => {
-    const player = new Player(p);
+    const player = new Player(p, this);
     this.entities.push(player);
     this.colliders.push(player.collider);
     return player;
@@ -158,6 +171,12 @@ export class Ld49Game extends Game {
     this.entities = this.entities.filter((entity) => !entity.toKill);
     this.enemies = this.enemies.filter((enemy) => !enemy.toKill);
 
+    if (this.enemies.length === 0 && this.player.health > 0) {
+      // TODO finished wave, congrats
+      this.waveNumber += 1;
+      this.startWave()
+    }
+
     this.entities.sort((a, b) => a.position[1] - b.position[1]);
   };
 
@@ -165,7 +184,6 @@ export class Ld49Game extends Game {
     scene.setCenterPosition(Math.round(this.player.position[0]), Math.round(this.player.position[1]));
 
     // TODO floor & stuff
-
     for (const entity of this.entities) {
       entity.draw(scene, this.resources);
     }
@@ -173,7 +191,16 @@ export class Ld49Game extends Game {
       entity.drawHud(scene, this.resources);
     }
 
+    // XXX INTERFACE
     scene.setCenterPosition(WIDTH / 2, HEIGHT / 2);
-    // TODO interface
+    const barWidth = 100;
+    const barHeight = 30;
+    const padding = 4;
+    const innerBarWidth = barWidth - padding * 2;
+    const innerBarHeight = barHeight - padding * 2;
+    scene.ctx.fillStyle = "#000000";
+    scene.ctx.fillRect(0, 0, barWidth, barHeight);
+    scene.ctx.fillStyle = "#FF0000";
+    scene.ctx.fillRect(padding,padding, innerBarWidth * this.player.health / this.player.maxHealth, innerBarHeight);
   };
 }

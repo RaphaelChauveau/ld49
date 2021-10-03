@@ -21,10 +21,12 @@ class Character extends PhysicalEntity {
 
   hit = (damage, effect) => {
     this.effect = effect || this.effect;
-    this.health -= damage;
-    if (this.health <= 0) {
-      this.die();
-
+    if (this.health > 0) {
+      this.health -= damage;
+      if (this.health <= 0) {
+        this.health = 0;
+        this.die();
+      }
     }
     //this.position = [0, 0];
     //this.collider.position = this.position;

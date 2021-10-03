@@ -3,8 +3,11 @@ import {angle, dif, div, magnitude, mul, normalize, sum} from "../engine/vector2
 import Effect from "./Effect";
 
 class Player extends Character {
-  constructor(position) {
+  constructor(position, game) {
     super(position, 20, 3);
+    this.game = game;
+    this.maxHealth = 100;
+    this.health = this.maxHealth;
     this.velocity = 180;
     this.damage = 50;
 
@@ -22,6 +25,14 @@ class Player extends Character {
 
     this.verticalInput = 0;
     this.horizontalInput = 0;
+  };
+
+  die = () => {
+    // this.game.onPlayerDie(); // TODO
+    // if (this.)
+    console.log('YOU ARE DEAD');
+    this.animation = "DEAD";
+    this._timeSinceAnimation = 0;
   };
 
   computeInputs = (inputHandler) => {
@@ -78,6 +89,10 @@ class Player extends Character {
     // update timings
     this._timeSinceAnimation += delta;
     this._timeSinceAttack += delta;
+
+    if (this.animation === "DEAD") {
+      return;
+    }
 
     let moving = true;
     this.animation = "RUN";
@@ -152,8 +167,18 @@ class Player extends Character {
       }
       case "RUN": {
         this.animate(scene, resources[`/res/base_run_${dir}.png`], 4, 500,
-          this._timeSinceAnimation, sum(this.position, [-64, -96]), 128, 128);
+          this._timeSinceAnimation, dif(this.position, [64, 96]), 128, 128);
         break;
+      }
+      case "DEAD": {
+        const pos = dif(this.position, [64, 96]);
+        const res = resources[`/res/base_dying_${dir}.png`];
+        if (this._timeSinceAnimation > this.deathAnimationDuration) {
+          scene.drawImage(res, 128 * 7, 0, 128, 128, pos[0], pos[1], 128, 128);
+        } else {
+          this.animate(scene, res, 8, this.deathAnimationDuration,
+            this._timeSinceAnimation, pos, 128, 128);
+        }
       }
     }
 
