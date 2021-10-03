@@ -118,7 +118,6 @@ class Enemy extends Character {
       this.animate(scene, resources[`/res/enemy_run_${dir}.png`], 4, 500,
           this._timeSinceChase, dif(this.position, [64, 96]), 128, 128);
     }
-    this.collider.draw(scene);
   };
 
   drawHud = (scene, resources) => {
@@ -132,7 +131,7 @@ class Enemy extends Character {
     const innerBarHeight = barHeight - padding;
     scene.ctx.fillStyle = "#000000";
     scene.ctx.fillRect(this.position[0] - barWidth / 2, this.position[1] - 80 - barHeight / 2, barWidth, barHeight);
-    scene.ctx.fillStyle = "#FF0000";
+    scene.ctx.fillStyle = "#a53030";
     scene.ctx.fillRect(this.position[0] - innerBarWidth / 2, this.position[1] - 80 - innerBarHeight / 2, innerBarWidth * this.health / this.maxHealth, innerBarHeight);
   }
 }

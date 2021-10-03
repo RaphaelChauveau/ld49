@@ -182,8 +182,6 @@ class Player extends Character {
         }
       }
     }
-
-    this.collider.draw(scene);
   };
 }
 
