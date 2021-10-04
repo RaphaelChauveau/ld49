@@ -33,38 +33,38 @@ export class Ld49Game extends Game {
 
   loadAssets = () => {
     this.resourceLoader = new ResourceLoader();
-    this.loadImage("../../res/player_right.png");
-    this.loadImage("../../res/player_left.png");
-    this.loadImage("../../res/player_run_right.png");
-    this.loadImage("../../res/player_run_left.png");
-    this.loadImage("../../res/player_dying_right.png");
-    this.loadImage("../../res/player_dying_left.png");
+    this.loadImage("res/player_right.png");
+    this.loadImage("res/player_left.png");
+    this.loadImage("res/player_run_right.png");
+    this.loadImage("res/player_run_left.png");
+    this.loadImage("res/player_dying_right.png");
+    this.loadImage("res/player_dying_left.png");
 
 
-    this.loadImage("../../res/enemy_run_right.png");
-    this.loadImage("../../res/enemy_run_left.png");
-    this.loadImage("../../res/enemy_dying_right.png");
-    this.loadImage("../../res/enemy_dying_left.png");
-    this.loadImage("../../res/enemy_eat_right.png");
-    this.loadImage("../../res/enemy_eat_left.png");
+    this.loadImage("res/enemy_run_right.png");
+    this.loadImage("res/enemy_run_left.png");
+    this.loadImage("res/enemy_dying_right.png");
+    this.loadImage("res/enemy_dying_left.png");
+    this.loadImage("res/enemy_eat_right.png");
+    this.loadImage("res/enemy_eat_left.png");
 
-    this.loadImage("../../res/attack.png");
+    this.loadImage("res/attack.png");
 
     // environment
-    this.loadImage("../../res/fire_pit.png");
-    this.loadImage("../../res/tree_1.png");
-    this.loadImage("../../res/medium_tree_1.png");
-    this.loadImage("../../res/medium_tree_2.png");
-    this.loadImage("../../res/small_rock_1.png");
-    this.loadImage("../../res/medium_rock_1.png");
-    this.loadImage("../../res/medium_rock_2.png");
+    this.loadImage("res/fire_pit.png");
+    this.loadImage("res/tree_1.png");
+    this.loadImage("res/medium_tree_1.png");
+    this.loadImage("res/medium_tree_2.png");
+    this.loadImage("res/small_rock_1.png");
+    this.loadImage("res/medium_rock_1.png");
+    this.loadImage("res/medium_rock_2.png");
 
     // sounds
-    load("../../res/Crunch.ogg");
-    load("../../res/Death.ogg");
-    load("../../res/Death2.ogg");
-    load("../../res/Hibou.ogg");
-    load("../../res/Hit.ogg");
+    load("res/Crunch.ogg");
+    load("res/Death.ogg");
+    load("res/Death2.ogg");
+    load("res/Hibou.ogg");
+    load("res/Hit.ogg");
   };
 
   loadImage = (path) => {
@@ -73,25 +73,25 @@ export class Ld49Game extends Game {
 
   initEnvironment = () => {
     // new
-    this.createObstacle([603 - 500, 129 - 500], 20, "../../res/tree_1.png");
-    this.createObstacle([309 - 500, 411 - 500], 20, "../../res/tree_1.png");
-    this.createObstacle([855 - 500, 471 - 500], 20, "../../res/tree_1.png");
-    this.createObstacle([366 - 500, 951 - 500], 20, "../../res/tree_1.png");
-    this.createObstacle([858 - 500, 261 - 500], 30, "../../res/medium_tree_1.png");
-    this.createObstacle([750 - 500, 606 - 500], 30, "../../res/medium_tree_1.png");
-    this.createObstacle([156 - 500, 687 - 500], 30, "../../res/medium_tree_1.png");
-    this.createObstacle([609 - 500, 426 - 500], 30, "../../res/medium_tree_2.png");
-    this.createObstacle([81 - 500, 495 - 500], 30, "../../res/medium_tree_2.png");
-    this.createObstacle([333 - 500, 123 - 500], 20, "../../res/small_rock_1.png");
-    this.createObstacle([948 - 500, 513 - 500], 20, "../../res/small_rock_1.png");
-    this.createObstacle([603 - 500, 693 - 500], 20, "../../res/small_rock_1.png");
-    this.createObstacle([222 - 500, 801 - 500], 20, "../../res/small_rock_1.png");
-    this.createObstacle([387 - 500, 264 - 500], 30, "../../res/medium_rock_1.png");
-    this.createObstacle([747 - 500, 348 - 500], 30, "../../res/medium_rock_1.png");
-    this.createObstacle([654 - 500, 834 - 500], 30, "../../res/medium_rock_1.png");
-    this.createObstacle([225 - 500, 210 - 500], 30, "../../res/medium_rock_2.png");
-    this.createObstacle([333 - 500, 606 - 500], 30, "../../res/medium_rock_2.png");
-    this.createObstacle([489 - 500, 777 - 500], 30, "../../res/medium_rock_2.png");
+    this.createObstacle([603 - 500, 129 - 500], 20, "res/tree_1.png");
+    this.createObstacle([309 - 500, 411 - 500], 20, "res/tree_1.png");
+    this.createObstacle([855 - 500, 471 - 500], 20, "res/tree_1.png");
+    this.createObstacle([366 - 500, 951 - 500], 20, "res/tree_1.png");
+    this.createObstacle([858 - 500, 261 - 500], 30, "res/medium_tree_1.png");
+    this.createObstacle([750 - 500, 606 - 500], 30, "res/medium_tree_1.png");
+    this.createObstacle([156 - 500, 687 - 500], 30, "res/medium_tree_1.png");
+    this.createObstacle([609 - 500, 426 - 500], 30, "res/medium_tree_2.png");
+    this.createObstacle([81 - 500, 495 - 500], 30, "res/medium_tree_2.png");
+    this.createObstacle([333 - 500, 123 - 500], 20, "res/small_rock_1.png");
+    this.createObstacle([948 - 500, 513 - 500], 20, "res/small_rock_1.png");
+    this.createObstacle([603 - 500, 693 - 500], 20, "res/small_rock_1.png");
+    this.createObstacle([222 - 500, 801 - 500], 20, "res/small_rock_1.png");
+    this.createObstacle([387 - 500, 264 - 500], 30, "res/medium_rock_1.png");
+    this.createObstacle([747 - 500, 348 - 500], 30, "res/medium_rock_1.png");
+    this.createObstacle([654 - 500, 834 - 500], 30, "res/medium_rock_1.png");
+    this.createObstacle([225 - 500, 210 - 500], 30, "res/medium_rock_2.png");
+    this.createObstacle([333 - 500, 606 - 500], 30, "res/medium_rock_2.png");
+    this.createObstacle([489 - 500, 777 - 500], 30, "res/medium_rock_2.png");
 
     this.firePit = new FirePit([0, 0]);
     this.entities.push(this.firePit);
@@ -116,7 +116,7 @@ export class Ld49Game extends Game {
   };
 
   startWave = () => {
-    play("../../res/Hibou.ogg");
+    play("res/Hibou.ogg");
 
     const nbEnemies = this.waveNumber * 2;
 
@@ -130,12 +130,12 @@ export class Ld49Game extends Game {
 
   onEnemyDie = () => {
     this.score += 2;
-    play('../../res/Death2.ogg');
+    play('res/Death2.ogg');
   };
 
   onPlayerDie = () => {
     console.log("ON PLAYER DIE");
-    play('../../res/Death.ogg');
+    play('res/Death.ogg');
     this.state = "GAME_OVER";
     this.highscore = parseInt(window.localStorage.getItem('score') || '0', 10);
     if (this.score > this.highscore) {

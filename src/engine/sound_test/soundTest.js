@@ -64,8 +64,8 @@ export const play = (src) => {
   instance.audio.play();
 };
 
-// const file = "../../res/computerNoise_000.ogg";
-/*const file = "../../res/lowFrequency_explosion_000.ogg";
+// const file = "res/computerNoise_000.ogg";
+/*const file = "res/lowFrequency_explosion_000.ogg";
 
 load(file);
 

@@ -92,7 +92,7 @@ class Enemy extends Character {
         if (!this.attackInflictedDamage
           && this._timeSinceLastAttack > 5 / 6 * this.attackDuration) {
           this.attackInflictedDamage = true;
-          play('../../res/Crunch.ogg');
+          play('res/Crunch.ogg');
           player.hit(this.damage);
         }
         if (this._timeSinceLastAttack > this.attackDuration) {
@@ -111,13 +111,13 @@ class Enemy extends Character {
   draw = (scene, resources) => {
     const dir = this.direction[0] >= 0 ? 'right' : 'left';
     if (this.state === "DEAD") {
-      this.animate(scene, resources[`../../res/enemy_dying_${dir}.png`], 8, this.deathAnimationDuration,
+      this.animate(scene, resources[`res/enemy_dying_${dir}.png`], 8, this.deathAnimationDuration,
         this._deadSince, dif(this.position, [64, 96]), 128, 128);
     } else if (this.state === "ATTACK") {
-      this.animate(scene, resources[`../../res/enemy_eat_${dir}.png`], 6, this.attackDuration,
+      this.animate(scene, resources[`res/enemy_eat_${dir}.png`], 6, this.attackDuration,
         this._timeSinceLastAttack, dif(this.position, [64, 96]), 128, 128);
     } else if (this.state === "CHASE"){
-      this.animate(scene, resources[`../../res/enemy_run_${dir}.png`], 4, 500,
+      this.animate(scene, resources[`res/enemy_run_${dir}.png`], 4, 500,
           this._timeSinceChase, dif(this.position, [64, 96]), 128, 128);
     }
   };

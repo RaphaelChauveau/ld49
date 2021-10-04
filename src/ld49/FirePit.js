@@ -12,7 +12,7 @@ class FirePit extends Obstacle {
   };
 
   draw = (scene, resources) => {
-    this.animate(scene, resources['../../res/fire_pit.png'], 4, 500,
+    this.animate(scene, resources['res/fire_pit.png'], 4, 500,
       this._timeSinceFire, dif(this.position, [64, 96]), 128, 128);
   };
 }

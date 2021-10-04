@@ -120,7 +120,7 @@ class Player extends Character {
     if (inputHandler.getKeyDown('MOUSE_CLICK')) {
       if (this._timeSinceAttack > this.attackCoolDown) {
         this._timeSinceAttack = 0;
-        play('../../res/Hit.ogg');
+        play('res/Hit.ogg');
 
         const toMouse = dif(inputHandler.getMousePosition(), [canvas.width / 2, canvas.height / 2]);
         this.attackDirection = normalize(toMouse);
@@ -157,25 +157,25 @@ class Player extends Character {
         }
         scene.ctx.rotate(angle);
         scene.ctx.translate(-this.position[0], -this.position[1]);
-        scene.drawImage(resources['../../res/attack.png'], 256 * currentFrame, 0, 256, 256,
+        scene.drawImage(resources['res/attack.png'], 256 * currentFrame, 0, 256, 256,
           this.position[0] - 128, this.position[1] - 128, 256, 256);
         scene.ctx.restore();
     }
 
     switch (this.animation) {
       case "IDLE": {
-        const spriteSheet = `../../res/player_${dir}.png`;
+        const spriteSheet = `res/player_${dir}.png`;
         scene.drawImage(resources[spriteSheet], this.position[0] - 64, this.position[1] - 96, 128, 128);
         break;
       }
       case "RUN": {
-        this.animate(scene, resources[`../../res/player_run_${dir}.png`], 4, 500,
+        this.animate(scene, resources[`res/player_run_${dir}.png`], 4, 500,
           this._timeSinceAnimation, dif(this.position, [64, 96]), 128, 128);
         break;
       }
       case "DEAD": {
         const pos = dif(this.position, [64, 96]);
-        const res = resources[`../../res/player_dying_${dir}.png`];
+        const res = resources[`res/player_dying_${dir}.png`];
         if (this._timeSinceAnimation > this.deathAnimationDuration) {
           scene.drawImage(res, 128 * 7, 0, 128, 128, pos[0], pos[1], 128, 128);
         } else {
