@@ -3,13 +3,15 @@
 //import ReactDOM from 'react-dom';
 // import App from './App';
 
-import {Ld49Game} from "./ld49/Ld49Game.js";
+// import {Ld49Game} from "./ld49/Ld49Game.js";
+import {BoidGame} from "./test_boids/BoidGame.js";
 // import * as serviceWorker from './serviceWorker';
 
 console.log('APP');
 const canvas = document.getElementById('canvas');
 console.log('CANVAS', canvas);
-const game = new Ld49Game(canvas);
+// const game = new Ld49Game(canvas);
+const game = new BoidGame(canvas);
 console.log('GAME', game);
 game.run();
 

@@ -1,4 +1,4 @@
-import { Boid } from "./Boid";
+import { Boid } from "./Boid.js";
 
 class RangeBoid extends Boid {
   constructor(x, y) {

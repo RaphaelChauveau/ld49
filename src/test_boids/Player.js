@@ -1,4 +1,4 @@
-import {magnitude} from "../engine/vector2";
+import {magnitude} from "../engine/vector2.js";
 
 class Player {
   constructor(x, y) {
@@ -26,7 +26,7 @@ class Player {
       const toOtherX = other.positionX - this.positionX;
       const toOtherY = other.positionY - this.positionY;
 
-      const magn = magnitude(toOtherX, toOtherY);
+      const magn = magnitude([toOtherX, toOtherY]);
       const overlap = this.radius + other.radius - magn;
 
       if (overlap > 0) {
@@ -55,7 +55,7 @@ class Player {
     }
     const toTargetX = this.targetX - this.positionX;
     const toTargetY = this.targetY - this.positionY;
-    const magn = magnitude(toTargetX, toTargetY);
+    const magn = magnitude([toTargetX, toTargetY]);
     this.dirX = toTargetX / magn;
     this.dirY = toTargetY / magn;
 

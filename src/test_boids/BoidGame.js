@@ -1,12 +1,11 @@
-import Game from '../engine/game';
-import { Boid } from "./Boid";
-import Obstacle from "./Obstacle";
-import Player from "./Player";
-import RangeBoid from "./RangeBoid";
-import Effect from "./Effect";
-import {magnitude} from "../engine/vector2";
-import ResourceLoader from "../engine/resourceLoader";
-import logo from "../res/logo.png";
+import Game from '../engine/game.js';
+import { Boid } from "./Boid.js";
+import Obstacle from "./Obstacle.js";
+import Player from "./Player.js";
+import RangeBoid from "./RangeBoid.js";
+import Effect from "./Effect.js";
+import {magnitude} from "../engine/vector2.js";
+import ResourceLoader from "../engine/resourceLoader.js";
 
 export class BoidGame extends Game {
   constructor(canvas) {
@@ -57,8 +56,7 @@ export class BoidGame extends Game {
 
   loadAssets = () => {
     this.resourceLoader = new ResourceLoader();
-    console.log('logo', logo);
-    this.logoImage = this.resourceLoader.loadImage(logo);
+    this.logoImage = this.resourceLoader.loadImage("../res/logo.png");
     console.log(this.logoImage);
   };
 
@@ -99,7 +97,7 @@ export class BoidGame extends Game {
       for (const boid of this.boids) {
         const fromPlayerX = boid.positionX - this.player.positionX;
         const fromPlayerY = boid.positionY - this.player.positionY;
-        const ratio = 100 / magnitude(fromPlayerX, fromPlayerY);
+        const ratio = 100 / magnitude([fromPlayerX, fromPlayerY]);
         // TODO affected by entity weight ?
         boid.addEffect(new Effect(500, [fromPlayerX * ratio, fromPlayerY * ratio])); // TODO away from player
       }

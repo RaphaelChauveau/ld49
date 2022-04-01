@@ -1,4 +1,4 @@
-import { magnitude } from "../engine/vector2";
+import { magnitude } from "../engine/vector2.js";
 
 const BOID_RADIUS = 10;
 const VELOCITY = 60; // word units per second
@@ -47,7 +47,7 @@ export class Boid {
       const toOtherX = collider.positionX - this.positionX;
       const toOtherY = collider.positionY - this.positionY;
 
-      const magn = magnitude(toOtherX, toOtherY);
+      const magn = magnitude([toOtherX, toOtherY]);
       const overlap = this.radius + collider.radius - magn;
 
       if (overlap > 0) {
@@ -80,7 +80,7 @@ export class Boid {
     }
     const toTargetX = this.targetX - this.positionX;
     const toTargetY = this.targetY - this.positionY;
-    const magn = magnitude(toTargetX, toTargetY);
+    const magn = magnitude([toTargetX, toTargetY]);
     this.dirX = toTargetX / magn;
     this.dirY = toTargetY / magn;
 
