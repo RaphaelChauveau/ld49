@@ -6,7 +6,7 @@ class Player {
     this.positionY = y;
     this.radius = 10;
     this.weight = 3;
-    this.velocity = 90 ; // word units per second
+    this.velocity = 90; // word units per second
 
     this.dirX = 1;
     this.dirY = 0;
