@@ -100,7 +100,7 @@ class Player extends Character {
     // TODO priority & diagonals
 
     this.computeInputs(inputHandler);
-    if (this.horizontalInput || this.verticalInput) {
+    if (this.horizontalInput || this.verticalInput) {
       this.direction = normalize([this.horizontalInput, this.verticalInput]);
     } else {
       moving = false;
